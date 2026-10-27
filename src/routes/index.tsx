@@ -178,6 +178,12 @@ function KnowledgAI() {
     return () => window.clearInterval(timer);
   }, [crawlProgress > 0 && crawlProgress < 100]);
 
+  useEffect(() => {
+    const handleNotice = (event: Event) => setSourceNotice((event as CustomEvent<string>).detail);
+    window.addEventListener("workspace-notice", handleNotice);
+    return () => window.removeEventListener("workspace-notice", handleNotice);
+  }, []);
+
   const visiblePages = useMemo(
     () => discoveredPages.filter(({ path }) => !exclude.trim() || !path.includes(exclude.replaceAll("*", ""))),
     [exclude],
